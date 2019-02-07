@@ -1,0 +1,38 @@
+=begin
+#==============================================================================
+# ** RWK Classes
+#==============================================================================
+
+  The API Classes are the best way to use the HTTP functions of
+the AsyncHTTP DLL. They allow a safer use of those functions and
+help to avoid memory leaks.
+
+  #--------------------------------------------------------------------------
+  # Using the Classes
+  #--------------------------------------------------------------------------
+
+    First of all, you need to create a Session using Session.new(). A good idea
+  is to create a Session at the SETUP and put it in a global variable.
+    Whenever you need to make requests to a HTTP Server, you must create a
+  Connection using the method create_connection() from the Session class. If
+  you will always use the same host, you can create a default Connection in the
+  SETUP and put it in a global variable, like you did with the Session.
+    Once you have the Connection, you can create Requests using the
+  create_request() method. You can then add HTTP headers to the Request with
+  the add_header() method and then send if with the send() method. You can give
+  the send() method a block (the "callback") that will be called when the
+  Request is over (successfully or not). In the callback you can do anything
+  with the files created by the request, even delete them.
+    You can create the Request using the "HTTP method" GET or POST. If you use
+  POST, then you can send data in a string in the send() method. This data
+  string will be interpreted by the server accordingly to some HTTP headers.
+    The Connection class has two convenient methods. The send_get_request()
+  method creates and sends a GET request with a header specifying that the UTF-8
+  charset should be used. The send_post_form_request() method creates and sends
+  a POST request with headers that indicates that UTF-8 should be used and that
+  the data is a list of name-value pairs, in the form of a string like this:
+      name1=value1&name2=value2&...&namex=valuex
+  (the name and value strings must be URL-encoded. Check the helper methods.)
+  This type of data imitates what happens when a web form is submitted. You will
+  usually use it with PHP scripts that use POST, for example.
+=end

@@ -1,0 +1,18 @@
+=begin
+#==============================================================================
+# ** Setup
+#==============================================================================
+
+  This part can be modified to do whatever you want to do. I use it only to
+create the default session that I'll use during the whole game.
+  You should change that "RWK Test" string to the name of your game or something
+like that. That string only identifies your "browser" to the HTTP server, it's
+not really important ;P
+  You could use this part to create a global connection (you will probably use
+always the same host, so that would be a good idea), or maybe to download some
+stuff before starting the game (keep in mind that the screen will stay black
+until this finishes).
+=end
+module RWK
+  $session = Session.new("RWK Test")
+end

@@ -1,0 +1,62 @@
+module RWK
+  class Request
+    METHOD_GET = "GET"
+    METHOD_POST = "POST"
+    
+    attr_reader :object;
+    attr_reader :method;
+    attr_reader :secure;
+    
+    def initialize(hConnect, object, method, secure, &on_close)
+      method = METHOD_GET if method == nil;
+      raise RuntimeError.new("Method must be GET or POST") if
+              method != METHOD_GET && method != METHOD_POST;
+      @object = object.to_s;
+      @method = method;
+      @secure = secure ?true:false;
+      @done = false;
+      @sent = false;
+      @closed = false;
+      @on_close = block_given? ?on_close:nil;
+      @hRequest = RWK::open_request(hConnect, object, method, secure);
+    end
+    
+    def add_header(headers)
+      raise RuntimeError.new("Illegal Request State.") if (closed? || sent?);
+      RWK::add_request_header(@hRequest, headers.to_s);
+      nil
+    end
+    
+    def send(headerFileName, fileName, data, &callback)
+      raise RuntimeError.new("Illegal Request State.") if (closed? || sent?);
+      RWK::send_request(@hRequest, headerFileName, fileName, data) {|done, error|
+        @done = true;
+        callback.call(self,done,error) if (block_given?);
+        self.close();
+      }
+      @sent = true;
+    end
+    
+    def close
+      return if closed?;
+      begin
+        RWK::close_http_handle(@hRequest);
+      rescue
+      end
+      @closed = true;
+      @on_close.call(self) if @on_close;
+      nil;
+    end
+    
+    def sent?
+      return @sent;
+    end
+    def done?
+      return @done;
+    end
+    def closed?
+      return @closed;
+    end
+
+  end
+end

@@ -1,0 +1,29 @@
+=begin
+  #--------------------------------------------------------------------------
+  # Downloading sinchronously
+  #--------------------------------------------------------------------------
+    That is, the game will be stuck here until the download completes. You
+  probably wouldn't want it, unless you're using Threads for some other thing
+  (if you don't know what Threads are, relax, you don't need them).
+    But the general idea (of waiting for the callback to set a variable) could
+  be useful. You can send the request before starting a scene loop and use the
+  Callback to set a variable that will break the loop, ending the scene.
+=end
+
+module RWK
+  module Ex
+    def self.ex4
+      connect = $session.connect("www.google.com.br");
+      request = connect.create_request("/intl/pt-BR_br/images/logo.gif", "GET", false);
+      
+      ended = false;
+      request.send("headers.txt", "out.gif", nil) { |req, done, error|
+        req.close();
+        connect.close() if !connect.has_open_requests?;
+        ended = true;
+      }
+      Kernel.sleep(0.01) while !ended;
+      print "Done!";
+    end
+  end
+end

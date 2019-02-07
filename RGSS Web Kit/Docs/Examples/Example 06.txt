@@ -1,0 +1,25 @@
+=begin
+  #--------------------------------------------------------------------------
+  # Connection Error
+  #--------------------------------------------------------------------------
+    The following example will surely give and error, since the host doesn't
+  exist. The purpose of this example is to show the result of the Callback when
+  there's an error (connection error or invalid url or object).
+    Is there's no active internet connection in the system, several errors can
+  happen, indicating unknown host or no response from the host.
+=end
+
+module RWK
+  module Ex
+    def self.ex6
+      connect = $session.connect("www.goomegle12369.com.br");
+      request = connect.create_request("/", "GET", false);
+      callback = Proc.new() { |req, done, error|
+        print "Callback "+req.to_s()+"\ndone: #{done}\nerror: #{error}"
+        req.close();
+        connect.close() if !connect.has_open_requests?;
+      }
+      request.send("headers.txt", "out.txt", nil, &callback)
+    end
+  end
+end

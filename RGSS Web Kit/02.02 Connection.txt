@@ -1,0 +1,62 @@
+module RWK
+  class Connection
+    
+    attr_reader :host;
+    
+    def initialize(hSession, host, &on_close)
+      @host = host.to_s;
+      @hConnect = RWK::connect_to(hSession, host);
+      @closed = false;
+      @requests = [];
+      @on_close = block_given? ?on_close:nil;
+    end
+    
+    def create_request(object, method, secure)
+      raise RuntimeError.new("Connection Closed.") if (closed?);
+      r = Request.new(@hConnect, object, method, secure) {|req|
+        @requests.delete(req);
+      }
+      @requests.push(r);
+      return r;
+    end
+    
+    def send_get_request(object, secure, headerFileName,
+      fileName, &callback)
+      req = self.create_request(object, "GET", secure);
+      return false if (!req);
+      req.add_header(CHARSET_UTF_8);
+      req.send(headerFileName, fileName, nil, &callback);
+      return true;
+    end
+    
+    def send_post_form_request(object, secure, headerFileName,
+      fileName, data, &callback)
+      req = self.create_request(object, "POST", secure);
+      return false if (!req);
+      req.add_header(CHARSET_UTF_8);
+      req.add_header(CONTENT_URLENCODED);
+      req.send(headerFileName, fileName, data, &callback);
+    end
+
+    def close
+      return if closed?;
+      @requests.each { |req|
+        req.close();
+      }
+      begin
+        RWK::close_http_handle(@hConnect);
+      rescue
+      end
+      @closed = true;
+      @on_close.call(self) if @on_close;
+    end
+    
+    def closed?
+      return @closed;
+    end
+    
+    def has_open_requests?
+      return !@requests.empty?
+    end
+  end
+end

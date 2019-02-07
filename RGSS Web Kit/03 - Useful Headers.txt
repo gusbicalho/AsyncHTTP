@@ -1,0 +1,4 @@
+module RWK
+  CONTENT_URLENCODED = "Content-Type: application/x-www-form-urlencoded"
+  CHARSET_UTF_8 = "Accept-Charset: utf-8"
+end

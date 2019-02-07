@@ -1,0 +1,24 @@
+=begin
+  #--------------------------------------------------------------------------
+  # Basic Use of the Session, Connection and Request classes
+  #--------------------------------------------------------------------------
+    You can create several sessions, but always remember to close them. The
+  best way is to use always a global session (by default it's in the $session
+  variable).
+=end
+
+module RWK
+  module Ex
+    def self.ex2
+      session = RWK::Session.new("Test RWK 2");
+      connect = session.connect("www.projetorpgmaker.com")
+      request = connect.create_request("/", "GET", false)
+      request.send("headers.txt", "out.txt", nil) { |req,done,error|
+        print "Callback\ndone: #{done}\nerror: #{error}"
+        request.close()
+        connect.close()
+        session.close()
+      }
+    end
+  end
+end

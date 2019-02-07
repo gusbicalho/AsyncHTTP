@@ -1,0 +1,38 @@
+module RWK
+  class Session
+    def initialize(agent)
+      @hSession = RWK::create_session(agent.to_s);
+      @closed = false;
+      @connections = [];
+    end
+    
+    def connect(host)
+      raise RuntimeError.new("Session Closed.") if (closed?);
+      c = Connection.new(@hSession, host) {|con|
+        @connections.delete(con);
+      }
+      @connections.push(c);
+      return c;
+    end
+    
+    def close
+      return if closed?;
+      @connections.each { |con|
+        con.close();
+      }
+      begin
+        RWK::close_http_handle(@hSession);
+      rescue
+      end
+      @closed = true;
+    end
+    
+    def closed?
+      return @closed;
+    end
+    
+    def has_open_connections?
+      return !@connections.empty?
+    end
+  end
+end

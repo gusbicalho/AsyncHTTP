@@ -1,0 +1,61 @@
+=begin
+#==============================================================================
+# * class Connection
+#==============================================================================
+
+  #--------------------------------------------------------------------------
+  # * Connection.new(hSession, host, &on_close)
+  #--------------------------------------------------------------------------
+  # * Constructor
+  #   hSession must be a valid Session handle
+  #   host is the server address
+  #   The on_close block is optional. It will be called after the
+  #     Connection is closed, with the Connection being passed as the
+  #     parameter.
+  #--------------------------------------------------------------------------
+
+  #--------------------------------------------------------------------------
+  # * create_request(object, method, secure)
+  #--------------------------------------------------------------------------
+  # * Returns a new Request, dependent on this Connection.
+  #   See the Request constructor for more info.
+  #--------------------------------------------------------------------------
+
+  #--------------------------------------------------------------------------
+  # * send_get_request(object, secure, headerFileName, fileName, &callback)
+  #--------------------------------------------------------------------------
+  # * Create and send a simple Request using GET.
+  #   See Request constructor and send() method for more info.
+  #--------------------------------------------------------------------------
+
+  #--------------------------------------------------------------------------
+  # * send_post_form_request(object, secure, headerFileName, fileName, data,
+  #       &callback)
+  #--------------------------------------------------------------------------
+  # * Create and send a Request using POST with data string
+  #     that will be interpreted as a web form submit.
+  #   The Request is sent with the header
+  #       "Content-Type: application/x-www-form-urlencoded"
+  #   See Request constructor and send() method for more info.
+  #--------------------------------------------------------------------------
+
+  #--------------------------------------------------------------------------
+  # * close
+  #--------------------------------------------------------------------------
+  # * Closes the Connection
+  #   Closes every Request opened by this Connection.
+  #--------------------------------------------------------------------------
+
+  #--------------------------------------------------------------------------
+  # * closed?
+  #--------------------------------------------------------------------------
+  # * Returns true if the Connection has been closed.
+  #--------------------------------------------------------------------------
+
+  #--------------------------------------------------------------------------
+  # * has_open_requests?
+  #--------------------------------------------------------------------------
+  # * Returns true if the Connection still has open Requests.
+  #--------------------------------------------------------------------------
+
+=end

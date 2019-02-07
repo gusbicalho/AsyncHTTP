@@ -1,0 +1,83 @@
+=begin
+#==============================================================================
+# * class Request
+#==============================================================================
+
+  #---------------------------------------------------------------------------
+  # * METHOD_GET = "GET"
+  # * METHOD_POST = "POST"
+  #---------------------------------------------------------------------------
+  # * Constants of the "HTTP methods"
+  #   These are the valid parametres for the "method" parameter of the Request
+  #     constructor.
+  #---------------------------------------------------------------------------
+
+  #---------------------------------------------------------------------------
+  # * Request.new(hConnect, object, method, secure, &on_close)
+  #---------------------------------------------------------------------------
+  # * Constructor
+  #   hConnect must be a valid Connection handle.
+  #   object if the part of the URL that comes after the host. It should start
+  #     with a slash ("/")
+  #   method is the HTTP method used for the Request. It must be equal to
+  #     METHOD_GET or METHOD_POST. If it's nil, METHOD_GET will be used. Any
+  #     other value will raise an exception.
+  #   if secure is true, the request will use HTTPS, otherwise it will use HTTP.
+  #   The on_close block is optional. It will be called after the Request is
+  #     closed, with the Request being passed as the parameter.
+  #---------------------------------------------------------------------------
+
+  #---------------------------------------------------------------------------
+  # * add_header(headers)
+  #---------------------------------------------------------------------------
+  # * Adds a HTTP header to the Request.
+  #   headers is the header to be added to the request. Several headers can be
+  #     added at once if they're separated by CR/LF ("\r\n")
+  #---------------------------------------------------------------------------
+
+  #---------------------------------------------------------------------------
+  # * send(headerFileName, fileName, data, &callback)
+  #---------------------------------------------------------------------------
+  # * Send the request
+  #   headerFilename is the name of the file where the header of the server
+  #     answer will be saved. If it's nil, the headers won't be saved.
+  #   fileName is the name of the file where the content of the server answer
+  #     will be saved. It can't be nil.
+  #   data is a string of data to be send along with the request. It's relevant
+  #     only in POST requests.
+  #   The callback block is optional. It will be called when the Request is over
+  #     Block Parameters:
+  #     > The Request
+  #     > true if the request completed successfully, false otherwise.
+  #     > An integer indicating the error code or 0 if successful.
+  #     After calling the callback, the Request will close itself.
+  #---------------------------------------------------------------------------
+
+  #---------------------------------------------------------------------------
+  # * close
+  #---------------------------------------------------------------------------
+  # * Closes the Request
+  #   Closing a sent Request before it is done will send an error to the
+  #     Callback.
+  #---------------------------------------------------------------------------
+
+  #---------------------------------------------------------------------------
+  # * sent?
+  #---------------------------------------------------------------------------
+  # * Returns true if the Request has already been sent.
+  #---------------------------------------------------------------------------
+
+  #---------------------------------------------------------------------------
+  # * done?
+  #---------------------------------------------------------------------------
+  # * Returns true if the Request has already finished receiving.
+  #     The Request is "done" before calling the callback.
+  #---------------------------------------------------------------------------
+
+  #---------------------------------------------------------------------------
+  # * closed?
+  #---------------------------------------------------------------------------
+  # * Returns true if the Request has been closed.
+  #---------------------------------------------------------------------------
+
+=end

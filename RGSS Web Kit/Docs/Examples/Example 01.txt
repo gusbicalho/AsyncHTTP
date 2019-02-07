@@ -1,0 +1,26 @@
+=begin
+  #--------------------------------------------------------------------------
+  # Using the Base Methods
+  #--------------------------------------------------------------------------
+
+    You can use the base methods directly, but you shouldn't. They weren't
+  created to be comprehensible, simple or safe. They exist to be used in the
+  classes implementation.
+=end
+
+module RWK
+  module Ex
+    def self.ex1
+      hSession = create_session("test")
+      hConnect = connect_to(hSession, "www.google.com")
+      hRequest = open_request(hConnect,
+            "/intl/en_ALL/images/logo.gif", "GET", false)
+      send_request(hRequest, "headers.txt", "out.gif", nil) { |done,error|
+        print "Callback\ndone: #{done}\nerror: #{error}"
+        close_http_handle(hRequest)
+        close_http_handle(hConnect)
+        close_http_handle(hSession)
+      }
+    end
+  end
+end

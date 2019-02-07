@@ -1,0 +1,33 @@
+=begin
+  #--------------------------------------------------------------------------
+  # Downloading two items simultaneously with the same Connection
+  #--------------------------------------------------------------------------
+    Note the use of connection.has_open_request? in the callback to know when
+  it's time to close the connection. Actually, I'm not sure if this is really
+  safe. You could have the same code running twice at the same time and that
+  would lead to unprevisible behaviour. Probably the best is to avoid having
+  two requests running at the same time, unless they have completely
+  independent callbacks. Remeber to make sure that the two requests don't
+  write to the same file.
+=end
+
+module RWK
+  module Ex
+    def self.ex3
+      connection = $session.connect("www.google.com");
+     
+      request = connection.create_request("/", "GET", false);
+      request2 = connection.create_request(
+            "/intl/en_ALL/images/logo.gif", "GET", false);
+      
+      callback = Proc.new() { |req, done, error|
+        print "Callback "+req.to_s()+"\ndone: #{done}\nerror: #{error}"
+        req.close();
+        connection.close() if !connection.has_open_requests?;
+      }
+      
+      request.send("headers.txt", "out.txt", nil, &callback)
+      request2.send("headers2.txt", "out.gif", nil, &callback)
+    end
+  end
+end

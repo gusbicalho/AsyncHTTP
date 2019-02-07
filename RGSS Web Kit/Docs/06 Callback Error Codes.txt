@@ -1,0 +1,22 @@
+=begin
+#==============================================================================
+# * Callback Error Codes
+#==============================================================================
+
+  The error codes passed to the callback of a request depend on the behaviour
+of the user system and connection and the requested host. They are set by
+Windows functions used by the AsyncHTTP DLL.
+  Below are the meanings of the most common error codes. Info about other error
+codes can be found at:
+  -> http://msdn.microsoft.com/en-us/library/ms681381(VS.85).aspx
+
+  12029 = Couldn't connect to host.
+  12030 = The connection with the server has been reset or terminated.
+  12152 = Invalid server response.
+  12005 = Invalid URL.
+  12007 = Couldn't find the Host.
+  12017 = Operation cancelled. Usually when the request is closed before
+          finishing.
+  12002 = The request has timed out.
+
+=end

@@ -1,0 +1,29 @@
+=begin
+  #--------------------------------------------------------------------------
+  # Server Errors
+  #--------------------------------------------------------------------------
+    If a server error, like the 404 int the following example, happens, the
+  download will complete successfully, but the resulting file won't have the
+  expected content (probably it'll be an error message from the server or it'll
+  be empty), and the headers file will indicate the error.
+    This API currently don't have any easy way to identify if such an error
+  heppened. You'll need to check the content of the downloaded file or the
+  headers file.
+=end
+
+module RWK
+  module Ex
+    def self.ex7
+      connect = $session.connect("www.google.com.br");
+      request = connect.create_request("/lala.gif", "GET", false);
+      
+      callback = Proc.new() { |req, done, error|
+        print "Callback "+req.to_s()+
+            "\ndone: #{done}\nerror: #{error}"
+        req.close();
+        connect.close() if !connect.has_open_requests?;
+      }
+      request.send("headers.txt", "out.gif", nil, &callback)
+    end
+  end
+end

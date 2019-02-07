@@ -1,0 +1,52 @@
+=begin
+#==============================================================================
+# ** RGSS Web Kit
+#------------------------------------------------------------------------------
+# (CC-BY) Gustavo Bicalho (gusbicalho@gmail.com)
+# Version 1.1
+# February, 2010
+#==============================================================================
+
+  The RGSS Web Kit (RWK) was designed to allow simple HTTP access through RGSS.
+It uses a DLL based on the WinAPI library WinHTTP. Of course, the idea was to
+create a simple way to do simple things, so I made the AsyncHTTP DLL which is
+much less powerful than WinHTTP but much more straight-to-the-point. I wanted to
+download resources from the web, so that's what it does: download resources from
+the web.
+  What you can do with RWK: download resources, send Post data to a server and
+read the response (like you would do if you filled a form and pressed submit,
+for example), send requests with special headers and check the headers of the
+response.
+  You can't check the progress of the download (that would be a nice feature but
+would make everything much more complicated) and you can't use this to do a MMO
+game because HTTP is a slow protocol.
+  Remember this is a HTTP library, not a browser. It won't do everything for
+you. If you want to access some service that needs cookies, you will have to
+emulate those cookies by yourself and deal with the HTTP headers. The same
+applies to everything else beyond the normal "Get" and "Post like a web form".
+RWK gives you only the basic stuff.
+  You can use this to create an Online Ranking, or some kind of chat or bulletin
+board in your game, or to check and download updates. Like the whole game making
+ thing, it's all up to your creativity.
+  Special thanks to Diovanni "AntiCasper" de Souza, for support and testing.
+  
+  Good Scripting!
+
+  Gustavo
+  
+#------------------------------------------------------------------------------
+
+- v1.1
+  > Helper methods added.
+  > Useful Headers added.
+
+- V1.0
+  > Initial Release
+
+#------------------------------------------------------------------------------
+
+Known Bugs:
+- Post requests don't work with redirection. That is, if the server redirects
+  the url to another document, your GET data is ok, but your POST data is lost.
+  
+=end

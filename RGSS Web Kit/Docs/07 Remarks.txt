@@ -1,0 +1,17 @@
+=begin
+#==============================================================================
+# * Remarks
+#==============================================================================
+
+  This API depends on a DLL. That means not everything works so nicely as in the
+"Pure Ruby World".
+  The Sessions, Connections and Requests MUST be closed with the close() method,
+otherwise they'll still waste memory even after Ruby collects the garbage (the
+DLL code is not affected by the Ruby GC).
+  If you use only one Session in the whole game, ok, you don't need to close it.
+If you use only one Connection (recommended), you don't need to close it, too.
+  The Requests are closed automatically after they return, i.e. after the
+Callback is executed. But if you create a request, don't send it and don't close
+it, it will be wasting memory.
+
+=end

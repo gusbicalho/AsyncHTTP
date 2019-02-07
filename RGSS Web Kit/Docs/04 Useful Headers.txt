@@ -1,0 +1,25 @@
+=begin
+#==============================================================================
+# ** Useful Headers
+#==============================================================================
+
+  These are HTTP headers commonly used.
+
+  #--------------------------------------------------------------------------
+  # * CONTENT_URLENCODED
+  #--------------------------------------------------------------------------
+  # Value: "Content-Type: application/x-www-form-urlencoded"
+  # It tells the server that post data is in name=value form.
+  # Used by Connection#send_post_form_request.
+  #--------------------------------------------------------------------------
+
+  #--------------------------------------------------------------------------
+  # * CHARSET_UTF_8
+  #--------------------------------------------------------------------------
+  # Value: "Accept-Charset: utf-8"
+  # It tells the server that the response should be in UTF-8 charset.
+  # This is the charset used by Ruby.
+  # Used by Connection#send_post_form_request and Connection#send_get_request.
+  #--------------------------------------------------------------------------
+
+=end

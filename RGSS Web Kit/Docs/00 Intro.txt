@@ -1,0 +1,16 @@
+=begin
+#==============================================================================
+# ** RGSS Web Kit 1.0 Docs
+#==============================================================================
+
+  The following sections contain documentation only, no script. You can delete
+them from your project if you don't need the info.
+  Reading this docs is essential to the correct use of RWK. You don't need to
+read the "DLL Docs" section, because it has a very specific destination, but
+everything else should be read.
+  Don't forget to read the "Remarks" sections and look at the Code Examples so
+you learn what and what not to do with this API.
+  After you read the Docs, go to the SETUP page, read the instructions there and
+start to program =]
+
+=end

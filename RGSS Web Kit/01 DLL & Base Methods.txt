@@ -1,0 +1,121 @@
+module RWK
+  DLL_NAME = 'AsyncHTTP'
+
+  DLL_CREATE_SESSION = Win32API.new(DLL_NAME, 'CreateSession',
+    ['p','p'], 'i')
+  DLL_CONNECT_TO = Win32API.new(DLL_NAME, 'ConnectTo',
+    ['i','p','p'], 'i');
+  DLL_OPEN_REQUEST = Win32API.new(DLL_NAME,'OpenRequest',
+    ['i','p','p','i','p'], 'i');
+  DLL_ADD_REQUEST_HEADER = Win32API.new(DLL_NAME,'AddRequestHeader',
+    ['i','p','i','p'], 'i');
+  DLL_SEND_REQUEST = Win32API.new(DLL_NAME,'SendRequest',
+    ['i','p','p','p','p','p','i'], 'i');
+  DLL_CLOSE_HTTP_HANDLE = Win32API.new(DLL_NAME,'CloseHttpHandle',
+    ['i','p'], 'i');
+
+  def self.safe_block(&block)
+    result = nil
+    error = nil
+    thread = Thread.new() {
+      begin
+        result = block.call()
+      rescue Exception
+        error = $!
+      end
+    }
+    thread.join()
+    return result if (!error)
+    raise error
+  end
+
+  def self.to_ws(str)
+    str = str.to_s();
+    wstr = "";
+    for i in 0..str.size
+      wstr += str[i,1]+"\0";
+    end
+    wstr += "\0";
+    return wstr;
+  end
+
+  def self.create_session(agent)
+    return safe_block() {
+      error = "\0"*4;
+      hSession = DLL_CREATE_SESSION.call(to_ws(agent), error);
+      raise RuntimeError.new("CreateSession Error: "+
+        error.unpack("L").to_s()) if hSession == 0;
+      hSession;
+    }
+  end
+
+  def self.connect_to(hSession, host)
+    return safe_block() {
+      error = "\0"*4;
+      hConnect = DLL_CONNECT_TO.call(hSession, to_ws(host),error);
+      raise RuntimeError.new("ConnectTo Error: "+
+        error.unpack("L").to_s()) if hConnect == 0;
+      hConnect;
+    }
+  end
+
+  def self.open_request(hConnect, object, method, secure)
+    return safe_block() {
+      error = "\0"*4;
+      hRequest = DLL_OPEN_REQUEST.call(hConnect,
+        to_ws(object), to_ws(method), (secure ? 1 : 0), error);
+      raise RuntimeError.new("OpenRequest Error: "+
+        error.unpack("L").to_s()) if hRequest == 0;
+      hRequest;
+    }
+  end
+
+  def self.add_request_header(hRequest, headers)
+    return safe_block() {
+      error = "\0"*4
+      r = DLL_ADD_REQUEST_HEADER.call(hRequest, to_ws(headers),
+        headers.length(), error);
+      raise RuntimeError.new("AddRequestHeader Error: "+
+        error.unpack("L").to_s()) if r == 0;
+      hRequest
+    }
+  end
+
+  def self.send_request(hRequest, headerFileName, fileName, data,
+    &callback)
+    safe_block() {
+      done = "\0"
+      error = "\0"*4
+      r = DLL_SEND_REQUEST.call(hRequest, done, error,
+        headerFileName, fileName, data, data ?data.length():0);
+      raise RuntimeError.new("SendRequest Error: "+
+        error.unpack("L").to_s()) if r == 0;
+      Thread.new() {
+        begin
+          while (done == "\0" && error == "\0\0\0\0")
+            Kernel.sleep(0.01);
+          end
+          callback.call(done != "\0",
+            error.unpack("L")) if (block_given?);
+        rescue
+          trace = $!.backtrace
+          str = $!.to_str
+          str += "\n"+trace[0] if trace.length > 0
+          print str
+          Kernel.exit
+        end
+      }
+    }
+  end
+
+  def self.close_http_handle(handle)
+    safe_block() {
+      error = "\0"*4
+      r = DLL_CLOSE_HTTP_HANDLE.call(handle, error);
+      raise RuntimeError.new("CloseHttpHandle Error: "+
+        error.unpack("L").to_s()) if r == 0;
+      true
+    }
+  end
+  
+end

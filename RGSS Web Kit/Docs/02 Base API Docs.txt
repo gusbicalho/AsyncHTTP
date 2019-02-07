@@ -1,0 +1,13 @@
+=begin
+#==============================================================================
+# ** Base API
+#==============================================================================
+
+  Direct use of the base methods is discouraged. There's no advantage in using
+them, you should use the API classes.
+  These methods exist for internal use, but they can be used independently,
+though. One of the examples use them directly and is there for didatic purpose.
+  There is no complete documentation of those methods. Example 1 and the DLL
+documentation should be enough to understand them if you want to.
+
+=end

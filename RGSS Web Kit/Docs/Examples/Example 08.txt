@@ -1,0 +1,28 @@
+=begin
+  #--------------------------------------------------------------------------
+  # Convenience Connection methods
+  #--------------------------------------------------------------------------
+    This example makes two Requests, one using a simple GET and one sends data
+  using POST. Both requests use the convenience methods of the Connection class.
+=end
+
+module RWK
+  module Ex
+    def self.ex8
+      conn = $session.connect("gustetris.awardspace.us")
+      
+      callback = Proc.new() { |req, done, error|
+        req.close();
+        if !conn.has_open_requests?
+          conn.close()
+          print "Both requests completed."
+        end
+      }
+      
+      conn.send_get_request("/test.php",false,nil,"out.txt",
+          &callback)
+      conn.send_post_form_request("/test.php",false,nil,
+          "out2.txt", "nome=Gustavo", &callback)
+    end
+  end
+end

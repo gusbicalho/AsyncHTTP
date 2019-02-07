@@ -1,0 +1,88 @@
+=begin
+#==============================================================================
+# ** AsyncHTTP DLL
+#==============================================================================
+
+  Here's an explanation of the interface of AsyncHTTP DLL, just in case someone
+wants to use it in other language/environment.
+  Keep in mind that the DLL was made specifically to be used here, so any new
+use should be done only after deep study of the base methods of this API so you
+can understand how the DLL should be used. Also, once the DLL was created for
+the limited environment of RGSS, it probably isn't the most intelligent and
+efficient way to use HTTP in most other cases.
+  Anyway, if you do find the DLL useful outside RGSS, please let me know and
+show me your work =]
+
+#==============================================================================
+# * Types
+#==============================================================================
+
+  WIDE_STR = Unicode String (Use the to_ws method to convert)
+  STR = Common String
+  STR[x] = String with x size that will be used to return a value. Use with
+           String#unpack
+
+#==============================================================================
+# * Interface
+#==============================================================================
+
+  #--------------------------------------------------------------------------
+  # int CreateSession(WIDE_STR agent, STR[4] error);
+  #--------------------------------------------------------------------------
+  # * Creates a HTTP session
+  #   Returns the session handle or 0 if error.
+  #--------------------------------------------------------------------------
+
+
+  #--------------------------------------------------------------------------
+  # int ConnectTo(int hSession, WIDE_STR host, STR[4] error);
+  #--------------------------------------------------------------------------
+  # * Creates a HTTP connection
+  #   Returns the connection handle or 0 if error.
+  #--------------------------------------------------------------------------
+
+
+  #--------------------------------------------------------------------------
+  # int OpenRequest(int hConnect, WIDE_STR object, WIDE_STR method, int secure,
+  #     STR[4] error);
+  #--------------------------------------------------------------------------
+  # * Creates a HTTP request
+  #   Returns the request handle or 0 if error.
+  #   method must be "GET" or "POST"
+  #   secure treated as boolean (0 = false, other = true)
+  #--------------------------------------------------------------------------
+
+  #--------------------------------------------------------------------------
+  # int AddRequestHeader(int hRequest, WIDE_STR headers, int headersLength,
+  #     STR[4] error);
+  #--------------------------------------------------------------------------
+  # * Adds headers to the request
+  #   Returns 0 if it fails, other value if it succeds.
+  #   headers can't be nil
+  #   if headersLength is -1, headers is null-terminated
+  #--------------------------------------------------------------------------
+    
+  #--------------------------------------------------------------------------
+  # int SendRequest(int hRequest, STR[1] done, STR[4] err, STR headerFileName,
+  #     STR fileName, STR data, int dataLength);
+  #--------------------------------------------------------------------------
+  # * Sends the request
+  #   Returns 0 if it fails, other value if it succeds.
+  #   done must be "\0", its value will change when completed
+  #   err must be "\0\0\0\0", its value will change when completed
+  #   headerFileName can be nil so the headers won't be saved
+  #   fileName can't be nil
+  #   data can be nil or a string. If it's nil, dataLength will be ignored.
+  #   dataLength can be 0, in this case data will be ignored.
+  #   WARNING: If dataLength is larger than data size, a memory
+  #            error will probably occur, shutting down the game.
+  #--------------------------------------------------------------------------
+
+  #--------------------------------------------------------------------------
+  # int CloseHttpHandle(int handle, STR[4] error);
+  #--------------------------------------------------------------------------
+  # * Closes the handle.
+  #   Returns 0 if it fails, other value if it succeds.
+  #--------------------------------------------------------------------------
+
+=end
